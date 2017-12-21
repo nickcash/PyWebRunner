@@ -121,7 +121,7 @@ class WebRunner(object):
     def _before(self):
         pass
 
-    def start(self):
+    def start(self, **kwargs):
         """Starts Selenium and (optionally) starts XVFB first.
 
         Note:
@@ -158,6 +158,8 @@ class WebRunner(object):
 
             from selenium.webdriver.chrome.options import Options
             chrome_options = Options()
+            for key, value in kwargs.get('experimental_options', {}).items():
+                chrome_options.add_experimental_option(key, value)
 
             # Set the width and height from arguments
             chrome_options.add_argument('--window-size={}x{}'.format(self.width, self.height))
