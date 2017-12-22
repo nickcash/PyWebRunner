@@ -15,7 +15,6 @@ import yaml
 import json
 from PyWebRunner.utils import (which, Timeout, fix_firefox, fix_chrome,
                                fix_gecko, prompt, download_file)
-from xvfbwrapper import Xvfb
 from selenium import webdriver
 from selenium.common.exceptions import (NoSuchElementException, NoSuchWindowException,
                                         NoAlertPresentException, WebDriverException,
@@ -138,13 +137,14 @@ class WebRunner(object):
         if self.xvfb:
             try:
                 print("\nStarting XVFB display...")
+                from xvfbwrapper import Xvfb
                 self.display = Xvfb(width=self.width, height=self.height, colordepth=16)
                 try:
                     self.display.start()
                 except OSError:
                     self.xvfb = False
                     print("\nUnable to start XVFB. Try running `./build/selenium.sh`")
-            except EnvironmentError:
+            except (EnvironmentError, ImportError):
                 print("\nSkipping XVFB run since it is not present.")
                 self.xvfb = False
 
